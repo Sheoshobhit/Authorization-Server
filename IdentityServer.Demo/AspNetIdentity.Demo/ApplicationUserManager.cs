@@ -30,13 +30,23 @@ Now to implement the “UserManager” class, we will be using the below class f
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
+            UserLockoutEnabledByDefault = true;
+            
+            MaxFailedAccessAttemptsBeforeLockout = 5;
+            DefaultAccountLockoutTimeSpan = new TimeSpan(15, 0, 0, 0);
+            
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var appDbContext = context.Get<ApplicationDbContext>();
             var appUserManager = new ApplicationUserManager(new UserStore<ApplicationUser>(appDbContext));
-
+            var dataProtectionProvider = options.DataProtectionProvider;
+            if (dataProtectionProvider != null)
+            {
+                appUserManager.UserTokenProvider =
+                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("User Management Data Protector"));
+            }
             return appUserManager;
         }
     }

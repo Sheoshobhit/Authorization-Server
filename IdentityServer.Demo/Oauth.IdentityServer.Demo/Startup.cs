@@ -17,8 +17,8 @@ namespace Oauth.IdentityServer.Demo
         {
             // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
             var certificate = Convert.FromBase64String(ConfigurationManager.AppSettings["SigningCertificate"]);
-            //app.Map("/core", coreApp =>
-            //{
+            app.Map("/core", coreApp =>
+            {
                 var factory = new IdentityServerServiceFactory()
                 .UseInMemoryClients(Clients.Get())
                 .UseInMemoryScopes(Scopes.Get())
@@ -31,8 +31,8 @@ namespace Oauth.IdentityServer.Demo
                     RequireSsl=false,
                     SigningCertificate= new X509Certificate2(certificate, ConfigurationManager.AppSettings["SigningCertificatePassword"])
                 };
-                app.UseIdentityServer(options);
-            //});
+                coreApp.UseIdentityServer(options);
+            });
         }
 
         X509Certificate2 LoadCertificate()

@@ -1,5 +1,9 @@
-﻿using ASPNetIdentity.Demo;
+﻿using AspNetIdentity.Demo.EmailComposers;
+using AspNetIdentity.Demo.Interfaces;
+using AspNetIdentity.Demo.Providers;
+using ASPNetIdentity.Demo;
 using ASPNetIdentity.Model;
+using ASPNetIdentity.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -84,8 +88,11 @@ namespace ASPNetIdentity.Controllers
 
                 var userToCreate = new ApplicationUser(user.UserName) { Email = user.Email };
                 IdentityResult result = UserManager.Create(userToCreate, user.Password);
-                
-                
+                var createdUser = UserManager.FindByEmail(userToCreate.Email);
+                var confirmationToken = HttpUtility.UrlEncode(UserManager.GenerateEmailConfirmationToken(createdUser.Id));
+                IEmailComposer emailComposer = new AccountConfirmationEmailComposer(userToCreate.Email, confirmationToken);
+                IEmailProvider emailProvider = new EmailProvider();
+                emailProvider.Send(emailComposer.Compose());
 
                 return Task.FromResult(Request.CreateResponse(HttpStatusCode.Created, user));
             }
@@ -93,6 +100,28 @@ namespace ASPNetIdentity.Controllers
             {
                 
                 throw;
+            }
+        }
+        [Route("ConfirmAccount")]
+        [HttpGet]
+        public Task<HttpResponseMessage> EmailAccountConfirmation([FromUri]EmailAccountConfirmation accountConfirmation)
+        {
+            try
+            {
+                var user = UserManager.FindByEmail(accountConfirmation.EmailAddress);
+                IdentityResult result = UserManager.ConfirmEmail(user.Id, accountConfirmation.AccountConfirmationToken);
+                if (result.Succeeded)
+                {
+                    return Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, result));
+                }
+                else
+                {
+                    return Task.FromResult(Request.CreateResponse(HttpStatusCode.NotFound, result));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

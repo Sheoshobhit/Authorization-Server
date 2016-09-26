@@ -76,6 +76,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -88,12 +89,19 @@
     <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="ApplicationUser.cs" />
     <Compile Include="ApplicationUserManager.cs" />
+    <Compile Include="EmailComposers\AccountConfirmationEmailComposer.cs" />
+    <Compile Include="EmailComposers\ForgottenPasswordEmailComposer.cs" />
+    <Compile Include="EmailComposers\PasswordChangedEmailComposer.cs" />
+    <Compile Include="Entities\EmailMessage.cs" />
+    <Compile Include="Interfaces\IEmailComposer.cs" />
+    <Compile Include="Interfaces\IEmailProvider.cs" />
     <Compile Include="Migrations\201608021042249_InitialCreate.cs" />
     <Compile Include="Migrations\201608021042249_InitialCreate.Designer.cs">
       <DependentUpon>201608021042249_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\EmailProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -104,6 +112,7 @@
       <DependentUpon>201608021042249_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

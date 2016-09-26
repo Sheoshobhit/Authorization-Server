@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
 using IdentityServer3.AccessTokenValidation;
+using System.Web.Http;
 
-[assembly: OwinStartup(typeof(Demo.Api.App_Start.Startup))]
+[assembly: OwinStartup(typeof(Demo.Api.Startup))]
 
-namespace Demo.Api.App_Start
+namespace Demo.Api
 {
     public class Startup
     {
@@ -15,9 +16,10 @@ namespace Demo.Api.App_Start
             // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:33317"//,
+                Authority = "http://localhost:33317/core"//,
                 //RequiredScopes = new[] { "WebApi" }
             });
+            
         }
     }
 }

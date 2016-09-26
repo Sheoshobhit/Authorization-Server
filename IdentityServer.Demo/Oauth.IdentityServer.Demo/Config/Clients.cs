@@ -42,6 +42,32 @@ namespace Oauth.IdentityServer.Demo.Config
                     {
                         new Secret("332FD1CF-9FEE-404C-93FA-66A8D465AA9F".Sha256())
                     }
+                },
+                new Client
+                {
+                     ClientId = "angularClientimplicit",
+                     ClientName = "Angular Client (Implicit)",
+                     Flow = Flows.Implicit,
+                     AllowAccessToAllScopes = true,
+
+                    // redirect = URI of the Angular application callback page
+                    RedirectUris = new List<string>
+                    {
+                        "http://localhost:10312/callback.html"
+                    }
+                }
+                ,
+                new Client
+                {
+                     ClientId = "angularclientropc",
+                     ClientName = "angular client (Resource Owner Password Credentials)",
+                     Flow = Flows.ResourceOwner,
+                     AllowAccessToAllScopes = true,
+
+                    ClientSecrets = new List<Secret>()
+                    {
+                        new Secret("secret2".Sha256())
+                    }
                 }
             };
 

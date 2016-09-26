@@ -26,7 +26,7 @@ namespace ASPNetIdentity
 
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:33317",
+                Authority = "http://localhost:33317/core",
                 //ValidationMode = ValidationMode.ValidationEndpoint,
                 RequiredScopes = new[] { "UserAccountManagement" }
             }
